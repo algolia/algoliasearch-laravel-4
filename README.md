@@ -2,9 +2,9 @@
 
 This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. PHP 5.5.9+ is supported.
 
-[![Build Status](https://img.shields.io/travis/algolia/algoliasearch-laravel/master.svg?style=flat)](https://travis-ci.org/algolia/algoliasearch-laravel)
-[![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
-[![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
+[![Build Status](https://img.shields.io/travis/algolia/algoliasearch-laravel-4/master.svg?style=flat)](https://travis-ci.org/algolia/algoliasearch-laravel)
+[![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel-4.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
+[![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel-4.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
 ## Table of Content
 
@@ -23,7 +23,7 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 Add `algolia/algoliasearch-laravel` to your `composer.json` file:
 
 ```bash
-composer require algolia/algoliasearch-laravel
+composer require algolia/algoliasearch-laravel-4
 ```
 
 Add the service provider to `config/app.php` in the `providers` array.

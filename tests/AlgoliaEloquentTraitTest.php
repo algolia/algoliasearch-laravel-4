@@ -5,6 +5,7 @@ namespace AlgoliaSearch\Tests;
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Mockery;
 use Orchestra\Testbench\TestCase;
 
@@ -14,7 +15,8 @@ class AlgoliaEloquentTraitTest extends TestCase
     {
         parent::setUp();
 
-        $this->app->config->set('algolia', ['default' => 'main','connections' => ['main' => ['id' => 'your-application-id','key' => 'your-api-key'],'alternative' => ['id' => 'your-application-id','key' => 'your-api-key']]]);
+        Config::set('algolia.id', 'your-application-id');
+        Config::set('algolia.key', 'your-api-key');
     }
 
     public function testGetAlgoliaRecordDefault()

@@ -7,6 +7,7 @@ use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model3;
 use AlgoliaSearch\Tests\Models\Model4;
 use AlgoliaSearch\Tests\Models\Model5;
+use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase;
 
 class ModelHelperTest extends TestCase
@@ -18,10 +19,12 @@ class ModelHelperTest extends TestCase
     {
         parent::setUp();
 
-        $this->app->config->set('algolia', ['default' => 'main','connections' => ['main' => ['id' => 'your-application-id','key' => 'your-api-key'],'alternative' => ['id' => 'your-application-id','key' => 'your-api-key']]]);
+        Config::set('algolia.id', 'your-application-id');
+        Config::set('algolia.key', 'your-api-key');
 
         $this->modelHelper = $this->app->make('\AlgoliaSearch\Laravel\ModelHelper');
     }
+
     public function testAutoIndexAndAutoDelete()
     {
         $this->assertEquals(true, $this->modelHelper->isAutoIndex(new Model1()));

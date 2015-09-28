@@ -1,6 +1,6 @@
 {
-    "name": "algolia/algoliasearch-laravel",
-    "description": "Laravel Algolia extension",
+    "name": "algolia/algoliasearch-laravel-4",
+    "description": "Laravel 4 Algolia extension",
     "license": "MIT",
     "keywords": [
         "laravel",

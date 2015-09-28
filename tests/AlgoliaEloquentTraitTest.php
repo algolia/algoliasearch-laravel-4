@@ -36,15 +36,16 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         $index = Mockery::mock('\AlgoliaSearch\Index');
 
+        $model4 = new Model4();
         $modelHelper->shouldReceive('getIndices')->andReturn(array($index, $index));
-        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model4()));
+        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId($model4));
         $modelHelper->shouldReceive('indexOnly')->andReturn(true);
 
         App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
-        $index->shouldReceive('addObject')->times(2)->with((new Model4())->getAlgoliaRecordDefault());
+        $index->shouldReceive('addObject')->times(2)->with($model4->getAlgoliaRecordDefault());
 
-        $this->assertEquals(null, (new Model4())->pushToIndex());
+        $this->assertEquals(null, $model4->pushToIndex());
     }
 
     public function testRemoveFromIndex()
@@ -56,14 +57,15 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         $index = Mockery::mock('\AlgoliaSearch\Index');
 
+        $model4 = new Model4();
         $modelHelper->shouldReceive('getIndices')->andReturn(array($index, $index));
-        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model4()));
+        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId($model4));
 
         App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
         $index->shouldReceive('deleteObject')->times(2)->with(1);
 
-        $this->assertEquals(null, (new Model4())->removeFromIndex());
+        $this->assertEquals(null, $model4->removeFromIndex());
     }
 
     public function tearDown()

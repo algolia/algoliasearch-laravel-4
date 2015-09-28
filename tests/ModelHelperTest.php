@@ -61,15 +61,27 @@ class ModelHelperTest extends TestCase
 
     public function testGetIndices()
     {
-        $this->assertEquals('model1s', $this->modelHelper->getIndices(new Model1())[0]->indexName);
-        $this->assertEquals('model5s_testing', $this->modelHelper->getIndices(new Model5())[0]->indexName);
-        $this->assertEquals('test', $this->modelHelper->getIndices(new Model1(), 'test')[0]->indexName);
-        $this->assertEquals('test_testing', $this->modelHelper->getIndices(new Model5(), 'test')[0]->indexName);
-        $this->assertEquals('model4s', $this->modelHelper->getIndices(new Model4())[0]->indexName);
+        $indices1 = $this->modelHelper->getIndices(new Model1());
+        $indices1 = $indices1[0];
+        $indices2 = $this->modelHelper->getIndices(new Model5());
+        $indices2 = $indices2[0];
+        $indices3 = $this->modelHelper->getIndices(new Model1(), 'test');
+        $indices3 = $indices3[0];
+        $indices4 = $this->modelHelper->getIndices(new Model5(), 'test');
+        $indices4 = $indices4[0];
+        $indices5 = $this->modelHelper->getIndices(new Model4());
+        $indices5 = $indices5[0];
+
+        $this->assertEquals('model1s', $indices1->indexName);
+        $this->assertEquals('model5s_testing', $indices2->indexName);
+        $this->assertEquals('test', $indices3->indexName);
+        $this->assertEquals('test_testing', $indices4->indexName);
+        $this->assertEquals('model4s', $indices5->indexName);
 
         $indices = $this->modelHelper->getIndices(new Model2());
+        $indices6 = $indices[0];
 
         $this->assertEquals(2, count($indices));
-        $this->assertEquals('index1', $indices[0]->indexName);
+        $this->assertEquals('index1', $indices6->indexName);
     }
 }

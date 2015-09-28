@@ -14,7 +14,7 @@ class Model2 extends Model
 
     protected $primaryKey = 'id2';
 
-    public $indices = ['index1', 'index2'];
+    public $indices = array('index1', 'index2');
 
     public function __construct()
     {

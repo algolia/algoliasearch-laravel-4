@@ -55,12 +55,12 @@ class ModelHelper
 
     public function getSettings(Model $model)
     {
-        return property_exists($model, 'algoliaSettings') ? $model->algoliaSettings : [];
+        return property_exists($model, 'algoliaSettings') ? $model->algoliaSettings : array();
     }
 
     public function getSlavesSettings(Model $model)
     {
-        return property_exists($model, 'slavesSettings') ? $model->slavesSettings : [];
+        return property_exists($model, 'slavesSettings') ? $model->slavesSettings : array();
     }
 
     /**
@@ -68,7 +68,7 @@ class ModelHelper
      */
     public function getIndices(Model $model, $indexName = null)
     {
-        $indicesName = [];
+        $indicesName = array();
 
         if ($indexName !== null) {
             $indicesName[] = $indexName;
@@ -89,7 +89,7 @@ class ModelHelper
 
     public function getIndicesTmp(Model $model)
     {
-        $indicesName = [];
+        $indicesName = array();
 
         if (property_exists($model, 'indices') && is_array($model->indices)) {
             $indicesName = $model->indices;

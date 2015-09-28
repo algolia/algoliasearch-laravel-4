@@ -21,8 +21,8 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testGetAlgoliaRecordDefault()
     {
-        $this->assertEquals(['id2' => 1, 'objectID' => 1], (new Model2())->getAlgoliaRecordDefault());
-        $this->assertEquals(['id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'], (new Model4())->getAlgoliaRecordDefault());
+        $this->assertEquals(array('id2' => 1, 'objectID' => 1), (new Model2())->getAlgoliaRecordDefault());
+        $this->assertEquals(array('id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'), (new Model4())->getAlgoliaRecordDefault());
     }
 
     public function testPushToindex()
@@ -34,7 +34,7 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         $index = Mockery::mock('\AlgoliaSearch\Index');
 
-        $modelHelper->shouldReceive('getIndices')->andReturn([$index, $index]);
+        $modelHelper->shouldReceive('getIndices')->andReturn(array($index, $index));
         $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model4()));
         $modelHelper->shouldReceive('indexOnly')->andReturn(true);
 
@@ -54,7 +54,7 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         $index = Mockery::mock('\AlgoliaSearch\Index');
 
-        $modelHelper->shouldReceive('getIndices')->andReturn([$index, $index]);
+        $modelHelper->shouldReceive('getIndices')->andReturn(array($index, $index));
         $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model4()));
 
         App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);

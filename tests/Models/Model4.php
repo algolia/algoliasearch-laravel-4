@@ -23,9 +23,9 @@ class Model4 extends Model
 
     public function getAlgoliaRecord()
     {
-        $extraData = [
+        $extraData = array(
             'name' => 'test',
-        ];
+        );
 
         return array_merge($this->toArray(), $extraData);
     }

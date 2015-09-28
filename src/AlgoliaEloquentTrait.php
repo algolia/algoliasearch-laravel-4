@@ -92,7 +92,7 @@ trait AlgoliaEloquentTrait
      *
      * @return mixed
      */
-    public function _browse($query, $parameters = [])
+    public function _browse($query, $parameters = array())
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -117,7 +117,7 @@ trait AlgoliaEloquentTrait
      *
      * @return mixed
      */
-    public function _search($query, $parameters = [])
+    public function _search($query, $parameters = array())
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');

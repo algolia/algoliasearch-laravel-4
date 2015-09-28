@@ -21,8 +21,10 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testGetAlgoliaRecordDefault()
     {
-        $this->assertEquals(array('id2' => 1, 'objectID' => 1), (new Model2())->getAlgoliaRecordDefault());
-        $this->assertEquals(array('id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'), (new Model4())->getAlgoliaRecordDefault());
+        $model2 = new Model2();
+        $model4 = new Model4();
+        $this->assertEquals(array('id2' => 1, 'objectID' => 1), $model2->getAlgoliaRecordDefault());
+        $this->assertEquals(array('id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'), $model4->getAlgoliaRecordDefault());
     }
 
     public function testPushToindex()

@@ -34,15 +34,18 @@ AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
 
 ## Configuration
 
-Laravel Algolia requires a connection configuration. To get started, you'll need to publish all vendor assets:
+Laravel Algolia requires a configuration. To get started, you'll need to create a ```algolia.php``` config file containing:
 
-```bash
-php artisan vendor:publish
+```php
+<?php
+
+return array(
+    'id' => 'APP_ID',
+    'key' => 'SECRET_KEY'
+);
 ```
 
-You can add the ```--provider="Vinkla\Algolia\AlgoliaServiceProvider"``` option to only publish assets of the Algolia package.
-
-This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
+You need to modify it to include your credentials.
 
 ## Quick Start
 

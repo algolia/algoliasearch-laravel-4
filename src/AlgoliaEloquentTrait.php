@@ -92,7 +92,7 @@ trait AlgoliaEloquentTrait
      *
      * @return mixed
      */
-    public function _browse($query, $parameters = array())
+    public function _browse($query, $parameters = [])
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -117,7 +117,7 @@ trait AlgoliaEloquentTrait
      *
      * @return mixed
      */
-    public function _search($query, $parameters = array())
+    public function _search($query, $parameters = [])
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -142,33 +142,40 @@ trait AlgoliaEloquentTrait
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
         $settings = $modelHelper->getSettings($this);
-        $slaves_settings = $modelHelper->getSlavesSettings($this);
-
         $indices = $modelHelper->getIndices($this);
 
+        $slaves_settings = $modelHelper->getSlavesSettings($this);
         $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
 
         $b = true;
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
-            $index->setSettings($settings);
 
-            if ($b) {
+            if ($b && isset($settings['slaves'])) {
+                $settings['slaves'] = array_map(function ($indexName) use ($modelHelper) {
+                    return $modelHelper->getFinalIndexName($this, $indexName);
+                }, $settings['slaves']);
+            }
+
+            if (count(array_keys($settings)) > 0) {
+                $index->setSettings($settings);
+            }
+
+            if ($b && isset($settings['slaves'])) {
                 $b = false;
                 unset($settings['slaves']);
             }
         }
 
-        if (count($slaves) > 0) {
-            foreach ($slaves as $slave) {
-                if (isset($slaves_settings[$slave])) {
-                    $index = $modelHelper->algolia->initIndex($slave);
+        foreach ($slaves as $slave) {
+            if (isset($slaves_settings[$slave])) {
+                $index = $modelHelper->getIndices($this, $slave)[0];
 
-                    $s = array_merge($settings, $slaves_settings[$slave]);
+                $s = array_merge($settings, $slaves_settings[$slave]);
 
+                if (count(array_keys($s)) > 0)
                     $index->setSettings($s);
-                }
             }
         }
     }

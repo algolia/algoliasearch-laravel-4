@@ -55,12 +55,19 @@ class ModelHelper
 
     public function getSettings(Model $model)
     {
-        return property_exists($model, 'algoliaSettings') ? $model->algoliaSettings : array();
+        return property_exists($model, 'algoliaSettings') ? $model->algoliaSettings : [];
     }
 
     public function getSlavesSettings(Model $model)
     {
-        return property_exists($model, 'slavesSettings') ? $model->slavesSettings : array();
+        return property_exists($model, 'slavesSettings') ? $model->slavesSettings : [];
+    }
+
+    public function getFinalIndexName(Model $model, $indexName)
+    {
+        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
+
+        return $indexName.$env_suffix;
     }
 
     /**
@@ -68,7 +75,7 @@ class ModelHelper
      */
     public function getIndices(Model $model, $indexName = null)
     {
-        $indicesName = array();
+        $indicesName = [];
 
         if ($indexName !== null) {
             $indicesName[] = $indexName;
@@ -78,10 +85,8 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
-
-        $indices = array_map(function ($index_name) use ($env_suffix) {
-            return $this->algolia->initIndex($index_name.$env_suffix);
+        $indices = array_map(function ($index_name) use ($model) {
+            return $this->algolia->initIndex($this->getFinalIndexName($model, $index_name));
         }, $indicesName);
 
         return $indices;
@@ -89,7 +94,7 @@ class ModelHelper
 
     public function getIndicesTmp(Model $model)
     {
-        $indicesName = array();
+        $indicesName = [];
 
         if (property_exists($model, 'indices') && is_array($model->indices)) {
             $indicesName = $model->indices;
@@ -97,10 +102,8 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
-
-        $indices = array_map(function ($index_name) use ($env_suffix) {
-            return $this->algolia->initIndex($index_name.$env_suffix.'_tmp');
+        $indices = array_map(function ($index_name) use ($model) {
+            return $this->algolia->initIndex($this->getFinalIndexName($index_name).'_tmp');
         }, $indicesName);
 
         return $indices;

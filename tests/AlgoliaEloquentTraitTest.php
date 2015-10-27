@@ -4,6 +4,7 @@ namespace AlgoliaSearch\Tests;
 
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
+use AlgoliaSearch\Tests\Models\Model6;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Mockery;
@@ -66,6 +67,30 @@ class AlgoliaEloquentTraitTest extends TestCase
         $index->shouldReceive('deleteObject')->times(2)->with(1);
 
         $this->assertEquals(null, $model4->removeFromIndex());
+    }
+
+    public function testSetSettings()
+    {
+        $index = Mockery::mock('\AlgoliaSearch\Index');
+        $index->shouldReceive('setSettings')->with(array('slaves' => array('model_6_desc_testing')));
+        $index->shouldReceive('setSettings')->with(array('ranking' => array('desc(name)')));
+
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
+        $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+        $modelHelper = Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
+
+        App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
+
+        $model6 = new Model6();
+        $modelHelper->shouldReceive('getSettings')->andReturn($realModelHelper->getSettings($model6));
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
+        $modelHelper->shouldReceive('getFinalIndexName')->andReturn($realModelHelper->getFinalIndexName($model6, 'model_6_desc'));
+        $modelHelper->shouldReceive('getSlavesSettings')->andReturn($realModelHelper->getSlavesSettings($model6));
+
+        $settings = $realModelHelper->getSettings($model6);
+        $this->assertEquals($modelHelper->getFinalIndexName($model6, $settings['slaves'][0]), 'model_6_desc_testing');
+
+        $model6->setSettings();
     }
 
     public function tearDown()

@@ -16,7 +16,6 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 6. [Indexing](#indexing)
 7. [Master/Slave](#masterslave)
 8. [Target multiple indexes](#target-multiple-indexes)
-9. [Search](#search)
 
 ## Install
 

@@ -67,7 +67,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public function getAlgoliaRecord()
     {
         return array_merge($this->toArray(), [
@@ -87,16 +87,43 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public $algoliaSettings = [
     	'attributesToIndex' => [
-    		'id', 
+    		'id',
     		'name',
     	],
     	'customRanking' => [
-    		'desc(popularity)', 
+    		'desc(popularity)',
     		'asc(name)',
     	],
+    ];
+}
+```
+
+#### Synonyms
+
+Synonyms are used to tell the engine about words or expressions that should be considered equal in regard to the textual relevance.
+
+Our [synonyms API](https://www.algolia.com/doc/relevance/synonyms) has been designed to manage as easily as possible a large set of synonyms for an index and its slaves.
+
+You can use the synonyms API by adding a `synonyms` in `$algoliaSettings` class property like this:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
+{
+    use AlgoliaEloquentTrait;
+
+    public $algoliaSettings = [
+        'synonyms' => [
+            [
+                'objectID' => 'red-color',
+                'type'     => 'synonym',
+                'synonyms' => ['red', 'another red', 'yet another red']
+            ]
+        ]
     ];
 }
 ```
@@ -131,6 +158,12 @@ You could also use the `search` method but it's not recommended to implement ins
 Contact::search('jon doe');
 ```
 
+You can also pass additional parameters to the search function:
+
+```php
+Contact::search('jon doe', array('hitsPerPage' => 5));
+```
+
 ## Options
 
 #### Auto-indexing & Asynchronism
@@ -138,19 +171,19 @@ Contact::search('jon doe');
 Each time a record is saved; it will be - asynchronously - indexed. On the other hand, each time a record is destroyed, it will be - asynchronously - removed from the index.
 
 You can disable the auto-indexing and auto-removing setting the following options:
-   
+
 ```php
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
-    
+
 	public static $autoIndex = false;
 	public static $autoDelete = false;
 }
 ```
- 
+
 You can temporary disable auto-indexing. This is often used for performance reason.
 
 ```php
@@ -174,7 +207,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public $indices = ['contact_all'];
 }
 ```
@@ -189,7 +222,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public static $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
 }
 ```
@@ -204,7 +237,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
 	public static $objectIdKey = 'new_key';
 }
 ```
@@ -219,7 +252,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
    	use AlgoliaEloquentTrait;
-    
+
 	public function indexOnly($index_name)
 	{
 		return (bool) $condition;
@@ -235,22 +268,22 @@ If you want to index records that didn't yet load any relations you can do it by
 
 It will look like:
 
-```
+```php
 public function getAlgoliaRecord()
 {
 	/**
 	 * Load the categories relation so that it's available
 	 * 	in the laravel toArray method
 	 */
-	$this->categories; 
-  
+	$this->categories;
+
    return $this->toArray();
 }
 ```
 
-In the resulted object you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like :
+In the resulted object you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like:
 
-```
+```php
 public function getAlgoliaRecord()
 {
 	/**
@@ -261,7 +294,7 @@ public function getAlgoliaRecord()
 	$extra_data['categories'] = array_map(function ($data) {
 							            return $data['name'];
 						        }, $this->categories->toArray();
-  
+
    return array_merge($this->toArray(), $extra_data);
 }
 ```
@@ -287,6 +320,7 @@ And trigger the removing using the `removeFromIndex` instance method.
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
 $contact->removeFromIndex();
 ```
+
 #### Reindexing
 
 To *safely* reindex all your records (index to a temporary index + move the temporary index to the current one atomically), use the `reindex` class method:
@@ -305,7 +339,7 @@ Contact::reindex(false);
 
 To clear an index, use the `clearIndices` class method:
 
-```ruby
+```php
 Contact::clearIndices();
 ```
 
@@ -319,14 +353,14 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
 	 use AlgoliaEloquentTrait;
-    
+
 	 public $algoliaSettings = [
 		'attributesToIndex' => [
-			'id', 
+			'id',
 			'name',
 		],
     	'customRanking' => [
-    		'desc(popularity)', 
+    		'desc(popularity)',
     		'asc(name)',
     	],
     	'slaves' => [
@@ -367,12 +401,12 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
-    
+
 	public $indices = [
-		'contact_public', 
+		'contact_public',
 		'contact_private',
 	];
-    
+
 	public function indexOnly($indexName)
 	{
 		if ($indexName == 'contact_public')
@@ -392,7 +426,7 @@ Book::search('foo bar', ['index' => 'contacts_private']);
 
 ## Eloquent compatibility
 
-Doing :
+Doing:
 
 ```
 Ad::where('id', $id)->update($attributes);
@@ -414,4 +448,3 @@ Compatible with 5.x applications
 ## License
 
 Laravel Algolia Search is licensed under [The MIT License (MIT)](LICENSE).
-

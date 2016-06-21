@@ -158,6 +158,11 @@ trait AlgoliaEloquentTrait
                 }, $settings['slaves']);
             }
 
+            if (isset($settings['synonyms'])) {
+                $index->batchSynonyms($settings['synonyms'], true, true);
+                unset($settings['synonyms']);
+            }
+
             if (count(array_keys($settings)) > 0) {
                 $index->setSettings($settings);
             }

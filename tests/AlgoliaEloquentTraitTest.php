@@ -5,6 +5,7 @@ namespace AlgoliaSearch\Tests;
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
 use AlgoliaSearch\Tests\Models\Model6;
+use AlgoliaSearch\Tests\Models\Model7;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Mockery;
@@ -91,6 +92,39 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals($modelHelper->getFinalIndexName($model6, $settings['slaves'][0]), 'model_6_desc_testing');
 
         $model6->setSettings();
+    }
+
+    public function testSetSynonyms()
+    {
+        $index = Mockery::mock('\AlgoliaSearch\Index');
+        $index->shouldReceive('batchSynonyms')->with(
+            [
+                [
+                    'objectID' => 'red-color',
+                    'type'     => 'synonym',
+                    'synonyms' => [
+                        'red',
+                        'really red',
+                        'much red'
+                    ]
+                ]
+            ],
+            true,
+            true
+        );
+
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
+        $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+        $modelHelper = Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
+
+        App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
+
+        $model7 = new Model7();
+        $modelHelper->shouldReceive('getSettings')->andReturn($realModelHelper->getSettings($model7));
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
+        $modelHelper->shouldReceive('getSlavesSettings')->andReturn($realModelHelper->getSlavesSettings($model7));
+
+        $this->assertEquals(null, $model7->setSettings());
     }
 
     public function tearDown()

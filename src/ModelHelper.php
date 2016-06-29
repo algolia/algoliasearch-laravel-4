@@ -43,6 +43,17 @@ class ModelHelper
         return !method_exists($model, 'indexOnly') || $model->indexOnly($index_name);
     }
 
+    public function wouldBeIndexed(Model $model, $index_name)
+    {
+        if (! method_exists($model, 'indexOnly')) {
+            return false;
+        }
+
+        $model->setRawAttributes($model->getOriginal());
+
+        return $model->indexOnly($index_name) === true;
+    }
+
     public function getObjectId(Model $model)
     {
         return $model->{$this->getObjectIdKey($model)};

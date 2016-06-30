@@ -49,9 +49,11 @@ class ModelHelper
             return false;
         }
 
-        $model->setRawAttributes($model->getOriginal());
+        $cloned = clone $model;
 
-        return $model->indexOnly($index_name) === true;
+        $cloned->setRawAttributes($cloned->getOriginal());
+
+        return $cloned->indexOnly($index_name) === true;
     }
 
     public function getObjectId(Model $model)

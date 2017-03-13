@@ -6,6 +6,7 @@ use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
 use AlgoliaSearch\Tests\Models\Model6;
 use AlgoliaSearch\Tests\Models\Model7;
+use AlgoliaSearch\Tests\Models\Model8;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Mockery;
@@ -29,6 +30,20 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals(array('id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'), $model4->getAlgoliaRecordDefault());
     }
 
+    public function testGetAlgoliaRecordBasedOnIndex()
+    {
+        $model8 = new Model8();
+
+        $this->assertEquals(array('id' => 1, 'objectID' => 1, 'key' => 'someKey'), $model8->getAlgoliaRecordDefault('index1'));
+        $this->assertEquals(array('id' => 1, 'objectID' => 1, 'name' => 'someName'), $model8->getAlgoliaRecordDefault('index2'));
+    }
+
+    public function testGetAlgoliaRecordDefaultIfNoIndexProvided()
+    {
+        $model8 = new Model8();
+
+        $this->assertEquals(array('id' => 1, 'objectID' => 1, 'key' => 'someKey'), $model8->getAlgoliaRecordDefault());
+    }
     public function testPushToindex()
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */

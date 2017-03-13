@@ -299,7 +299,42 @@ public function getAlgoliaRecord()
 }
 ```
 
+### Dynamic record attributes
 
+Similar to [targeting multiple indices](#target-multiple-indexes), the `getAlgoliaRecord` method optionally takes an index name as its first parameter. This is useful if have more than one index and you want to shape models differently based on the index they'll be inserted into.
+
+See an example of storing different contacts based on the index below:
+
+```php
+<?php
+
+use Illuminate\Database\Eloquent\Model;
+use AlgoliaSearch\Laravel\AlgoliaEloquentTrait;
+
+class Contact extends Model
+{
+    use AlgoliaEloquentTrait;
+
+    public $indices = [
+        'private_contacts',
+        'public_contacts'
+    ];
+
+    public function getAlgoliaRecord($indexName)
+    {
+        $extraData = [];
+
+        if ($indexName === 'private_contacts') {
+            $extraData = [
+                'personal_number' => $this->personal_number,
+                'home_address' => $this->home_address
+            ];
+        }
+
+        return array_merge($this->toArray(), $extraData);
+    }
+}
+```
 
 ## Indexing
 

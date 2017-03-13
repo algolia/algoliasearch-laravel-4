@@ -122,8 +122,8 @@ class ModelHelper
         return $indices;
     }
 
-    public function getAlgoliaRecord(Model $model)
+    public function getAlgoliaRecord(Model $model, $indexName = null)
     {
-        return $model->getAlgoliaRecordDefault();
+        return $model->getAlgoliaRecordDefault($indexName);
     }
 }

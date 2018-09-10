@@ -1,4 +1,10 @@
-# Laravel Algolia Search
+# [UNMAINTAINED] Laravel Algolia Search
+
+---
+
+This package is unmaintained and deprecated, we recommend using [Laravel Scout](https://laravel.com/docs/scout), which requires Laravel 5.4+.
+
+---
 
 This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. PHP 5.4+ is supported.
 
